@@ -2,13 +2,14 @@ package com.codenjoy.dojo.tetris.client.AI;
 
 import com.codenjoy.dojo.services.Command;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.tetris.client.AI.figures.*;
 import com.codenjoy.dojo.tetris.client.Board;
 import com.codenjoy.dojo.tetris.client.GlassBoard;
 import com.codenjoy.dojo.tetris.model.Elements;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * @author Aydar Rafikov
@@ -17,61 +18,30 @@ public class Bot {
 
     public List<Command> getAnswerList(Board board) {
 
-//        BoardSimulator boardSimulator = new BoardSimulator();
-//        boardSimulator.setLayers(board.getGlass().getLayersString().get(0));
-//        boardSimulator.getLayers().forEach(System.out::println);
-
-
-
         Elements type = board.getCurrentFigureType();
         Point currentCenter = board.getCurrentFigurePoint();
         Point betterCenter = null;
-        Figure figure = new Figure();
-        //    BLUE('I', 2),
-        //    CYAN('J', 3),
-        //    ORANGE('L', 4),
-        //    YELLOW('O', 1),
-        //    GREEN('S', 5),
-        //    PURPLE('T', 7),
-        //    RED('Z', 6),
-        //    NONE('.', 0);
 
-        switch (type) {
-            case YELLOW:
-                figure = new O_Figure();
-                break;
-            case BLUE:
-                figure = new I_Figure();
-                break;
-            case CYAN:
-                figure = new J_Figure();
-                break;
-            case ORANGE:
-                figure = new L_Figure();
-                break;
-            case GREEN:
-                figure = new S_Figure();
-                break;
-            case PURPLE:
-                figure = new T_Figure();
-                break;
-            case RED:
-                figure = new Z_Figure();
-                break;
-            default:
-                System.out.println("IDK THIS TYPE");
-        }
+        Queue<Elements> elements = new LinkedList<>();
 
-        betterCenter = figure.getBetterCenter(currentCenter.getX(), currentCenter.getY(), board);
+        elements.add(type);
+        elements.add(board.getFutureFigures().get(0)); // самое то
+//        elements.add(board.getFutureFigures().get(1)); // 3 фигуры реально, но долго, появляются артефакты
+//        elements.add(board.getFutureFigures().get(2)); // 4 тоже фиг просчитаешь
+//        elements.add(board.getFutureFigures().get(3)); // просчитать 5 фигур невозможно
 
-        List<Command> result = new ArrayList<Command>();
+        Calculator.calculateBetterCenter(board, elements);
+        betterCenter = Calculator.betterCenter;
+
+        List<Command> result = new ArrayList<>();
         if (betterCenter == null) {
             return result;
         }
 
+        // определение нажатий относительно центра и поворота
         int difference = currentCenter.getX() - betterCenter.getX();
-        if (figure.getRotate() > 0) {
-            for (int i = 0; i < figure.getRotate(); i++) {
+        if (Calculator.betterRotate > 0) {
+            for (int i = 0; i < Calculator.betterRotate; i++) {
                 result.add(Command.ROTATE_CLOCKWISE_90);
             }
         }
@@ -85,13 +55,12 @@ public class Bot {
             }
         }
 
-
+        // сброс фигуры вниз
         result.add(Command.DOWN);
 
-
+        // вывод небольшой информации
+        System.out.println(elements);
         System.out.println(type);
-        System.out.println(betterCenter.getX() + " better " + betterCenter.getY());
-        System.out.println(currentCenter.getX() + " current " + currentCenter.getY());
         System.out.println(result);
 
         return result;
