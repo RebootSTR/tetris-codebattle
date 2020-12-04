@@ -12,14 +12,14 @@ import lombok.Setter;
 @Setter
 public class T_Figure extends Figure {
 
-    @Override
-    public Point[] getPoints(int x, int y) {
-        Point[] points = new Point[4];
-        Point center = new PointImpl(x, y);
-        points[0] = center;
-        points[1] = center.copy().shiftLeft(1);
-        points[2] = center.copy().shiftRight(1);
-        points[3] = center.copy().shiftTop(1);
-        return points;
-    }
+//    @Override
+//    public Point[] getPoints(int x, int y) {
+//        Point[] points = new Point[4];
+//        Point center = new PointImpl(x, y);
+//        points[0] = center;
+//        points[1] = center.copy().shiftLeft(1);
+//        points[2] = center.copy().shiftRight(1);
+//        points[3] = center.copy().shiftTop(1);
+//        return points;
+//    }
 }

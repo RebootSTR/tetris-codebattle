@@ -17,12 +17,17 @@ public class Bot {
 
     public List<Command> getAnswerList(Board board) {
 
-        GlassBoard glassBoard = board.getGlass();
+//        BoardSimulator boardSimulator = new BoardSimulator();
+//        boardSimulator.setLayers(board.getGlass().getLayersString().get(0));
+//        boardSimulator.getLayers().forEach(System.out::println);
+
+
+
         Elements type = board.getCurrentFigureType();
         Point currentCenter = board.getCurrentFigurePoint();
         Point betterCenter = null;
-        Figure figure = null;
-        //     BLUE('I', 2),
+        Figure figure = new Figure();
+        //    BLUE('I', 2),
         //    CYAN('J', 3),
         //    ORANGE('L', 4),
         //    YELLOW('O', 1),
@@ -57,9 +62,7 @@ public class Bot {
                 System.out.println("IDK THIS TYPE");
         }
 
-        if (figure != null) {
-            betterCenter = figure.getBetterCenter(currentCenter.getX(), currentCenter.getY(), glassBoard);
-        }
+        betterCenter = figure.getBetterCenter(currentCenter.getX(), currentCenter.getY(), board);
 
         List<Command> result = new ArrayList<Command>();
         if (betterCenter == null) {
@@ -67,6 +70,11 @@ public class Bot {
         }
 
         int difference = currentCenter.getX() - betterCenter.getX();
+        if (figure.getRotate() > 0) {
+            for (int i = 0; i < figure.getRotate(); i++) {
+                result.add(Command.ROTATE_CLOCKWISE_90);
+            }
+        }
         if (difference > 0) {
             for (int i = 0; i < difference; i++) {
                 result.add(Command.LEFT);
@@ -76,6 +84,7 @@ public class Bot {
                 result.add(Command.RIGHT);
             }
         }
+
 
         result.add(Command.DOWN);
 

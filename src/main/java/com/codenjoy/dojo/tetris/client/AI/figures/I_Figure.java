@@ -5,8 +5,6 @@ import com.codenjoy.dojo.services.PointImpl;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Arrays;
-
 /**
  * @author Aydar Rafikov
  */
@@ -14,14 +12,19 @@ import java.util.Arrays;
 @Setter
 public class I_Figure extends Figure {
 
+//    @Override
+//    public Point[] getPoints(int x, int y) {
+//        Point[] points = new Point[4];
+//        Point center = new PointImpl(x, y);
+//        points[0] = center;
+//        points[1] = center.copy().shiftTop(1);
+//        points[2] = center.copy().shiftBottom(1);
+//        points[3] = center.copy().shiftBottom(2);
+//        return points;
+//    }
+
     @Override
-    public Point[] getPoints(int x, int y) {
-        Point[] points = new Point[4];
-        Point center = new PointImpl(x, y);
-        points[0] = center;
-        points[1] = center.copy().shiftTop(1);
-        points[2] = center.copy().shiftBottom(1);
-        points[3] = center.copy().shiftBottom(2);
-        return points;
+    public int getRightWall() {
+        return 17;
     }
 }

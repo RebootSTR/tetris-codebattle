@@ -19,10 +19,10 @@ public class FigureRotator {
     };
 
     public static Point[] predictCurrentFigurePoints(Rotation rotation, Point anchor, Elements figureType) {
-        var shiftTopAfterRotation = getShiftAfterRotation(Direction.UP, rotation);
-        var shiftRightAfterRotation = getShiftAfterRotation(Direction.RIGHT, rotation);
-        var shiftBottomAfterRotation = getShiftAfterRotation(Direction.DOWN, rotation);
-        var shiftLeftAfterRotation = getShiftAfterRotation(Direction.LEFT, rotation);
+        BiFunction<Point, Integer, Point> shiftTopAfterRotation = getShiftAfterRotation(Direction.UP, rotation);
+        BiFunction<Point, Integer, Point> shiftRightAfterRotation = getShiftAfterRotation(Direction.RIGHT, rotation);
+        BiFunction<Point, Integer, Point> shiftBottomAfterRotation = getShiftAfterRotation(Direction.DOWN, rotation);
+        BiFunction<Point, Integer, Point> shiftLeftAfterRotation = getShiftAfterRotation(Direction.LEFT, rotation);
 
         switch (figureType) {
         case BLUE:
