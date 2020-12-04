@@ -24,6 +24,7 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.services.printer.CharElements;
+import lombok.Getter;
 
 /**
  * User: serhiy.zelenin
@@ -32,21 +33,24 @@ import com.codenjoy.dojo.services.printer.CharElements;
  */
 public enum Elements implements CharElements {
 
-    BLUE('I', 2),
-    CYAN('J', 3),
-    ORANGE('L', 4),
-    YELLOW('O', 1),
-    GREEN('S', 5),
-    PURPLE('T', 7),
-    RED('Z', 6),
-    NONE('.', 0);
+    BLUE('I', 2, 2),
+    CYAN('J', 3, 4),
+    ORANGE('L', 4, 4),
+    YELLOW('O', 1, 1),
+    GREEN('S', 5, 2),
+    PURPLE('T', 7, 4),
+    RED('Z', 6, 2),
+    NONE('.', 0, 0);
 
     final char ch;
     final int index;
+    @Getter
+    final int countRotates;
 
-    Elements(char ch, int index) {
+    Elements(char ch, int index, int countRotates) {
         this.ch = ch;
         this.index = index;
+        this.countRotates = countRotates;
     }
 
     @Override
