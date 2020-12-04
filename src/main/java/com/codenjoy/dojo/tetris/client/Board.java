@@ -137,6 +137,10 @@ public class Board extends AbstractTextBoard {
         return FigureRotator.predictCurrentFigurePoints(rotation, figureAnchor, getCurrentFigureType());
     }
 
+    public Point[] predictCurrentFigurePoints(Point figureAnchor, Rotation rotation, Elements type) {
+        return FigureRotator.predictCurrentFigurePoints(rotation, figureAnchor, type);
+    }
+
     /**
      * Позволяет определить координаты точек текущей фигуры в исходном положении. (в
      * котором она появляется в стакане)!
