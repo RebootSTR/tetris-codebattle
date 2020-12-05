@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.tetris.client.AI;
 
+import com.codenjoy.dojo.services.FigureRotator;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.Rotation;
@@ -30,20 +31,18 @@ public class Calculator {
     private static Point[] getPoints(int x, int y, int rotate, Elements type) {
         switch (rotate) {
             case 1:
-                return _board.predictCurrentFigurePoints(new PointImpl(x, y), Rotation.CLOCKWIZE_90, type);
+                return FigureRotator.predictCurrentFigurePoints(Rotation.CLOCKWIZE_90, new PointImpl(x, y), type);
             case 2:
-                return _board.predictCurrentFigurePoints(new PointImpl(x, y), Rotation.CLOCKWIZE_180, type);
+                return FigureRotator.predictCurrentFigurePoints(Rotation.CLOCKWIZE_180, new PointImpl(x, y),  type);
             case 3:
-                return _board.predictCurrentFigurePoints(new PointImpl(x, y), Rotation.CLOCKWIZE_270, type);
+                return FigureRotator.predictCurrentFigurePoints(Rotation.CLOCKWIZE_270, new PointImpl(x, y),  type);
             default:
-                return _board.predictCurrentFigurePoints(new PointImpl(x, y), Rotation.CLOCKWIZE_0, type);
+                return FigureRotator.predictCurrentFigurePoints( Rotation.CLOCKWIZE_0, new PointImpl(x, y), type);
         }
     }
 
-    public static void calculateBetterCenter(Board board, Queue<Elements> elements) {
-        _board = board;
-        _glassBoard = board.getGlass();
-        simulator.setLayers(_glassBoard.getLayersString().get(0), board.predictCurrentFigurePoints());
+    public static void calculateBetterCenter(String layer, Queue<Elements> elements, Point[] points) {
+        simulator.setLayers(_glassBoard.getLayersString().get(0), points);
         betterCost = 100000;
         calculateCost(elements, true, 0);
     }
