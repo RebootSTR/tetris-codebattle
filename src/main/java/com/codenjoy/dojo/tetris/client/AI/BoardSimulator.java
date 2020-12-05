@@ -76,7 +76,7 @@ public class BoardSimulator {
     }
 
     public boolean isFree(int x, int y) {
-        int banColumn = countFreeSpace < 396 - 90 ? 19 : 17;
+        int banColumn = countFreeSpace < 396 - 85 ? 19 : 17;
 
         if (x < 0 || x > 17 || y < 0 || y > 17) {
             return false;
@@ -125,25 +125,38 @@ public class BoardSimulator {
     }
 
     public double getCost(double startCost) {
+        // очищенные ряды
         int cleared = clear();
 
+        // отверстия
         int holes = getCountHoles();
+        // колодцы
         int sumps = getCountSumps();
+        // вертикальные переходы
         int columnJumps = getCountColumnJumps();
+        // горизонтальные переходы
         int rowJumps = getCountRowJumps();
 
         double cost = startCost;
 
-        // отверстия
-        cost += holes * 26.8;
-        // очищенные ряды
-        cost -= Math.pow(cleared, 8);
-        // колодцы
-        cost += sumps * 15.8;
-        // вертикальные переходы
-        cost += columnJumps * 27.6;
-        // горизонтальные переходы
-        cost += rowJumps * 30.2;
+        // бесполезная идея, но на всякий случай пусть будет, мб придумаю что сделать можно
+        Stratrgy stratrgy = Stratrgy.POINTS;
+        switch (stratrgy) {
+            case SURVIVAL:
+                cost += holes * 26.8;
+                cost += cleared;
+                cost += sumps * 15.8;
+                cost += columnJumps * 27.6;
+                cost += rowJumps * 30.2;
+                break;
+            case POINTS:
+                cost += holes * 26.8;
+                cost -= Math.pow(cleared, 8);
+                cost += sumps * 15.8;
+                cost += columnJumps * 27.6;
+                cost += rowJumps * 30.2;
+                break;
+        }
 
         return cost;
     }

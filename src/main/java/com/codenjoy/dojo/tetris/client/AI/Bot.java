@@ -30,6 +30,8 @@ public class Bot {
 //        elements.add(board.getFutureFigures().get(2)); // 4 тоже фиг просчитаешь
 //        elements.add(board.getFutureFigures().get(3)); // просчитать 5 фигур невозможно
 
+        System.out.println(elements);
+
         Calculator.calculateBetterCenter(board, elements);
         betterCenter = Calculator.betterCenter;
 
@@ -59,7 +61,6 @@ public class Bot {
         result.add(Command.DOWN);
 
         // вывод небольшой информации
-        System.out.println(elements);
         System.out.println(type);
         System.out.println(result);
 
