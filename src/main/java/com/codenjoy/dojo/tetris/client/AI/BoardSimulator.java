@@ -1,7 +1,10 @@
 package com.codenjoy.dojo.tetris.client.AI;
 
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.tetris.client.Board;
+import com.codenjoy.dojo.tetris.client.GlassBoard;
 import lombok.Getter;
+import scala.Char;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +22,8 @@ public class BoardSimulator {
      * Костыль, стобы не врезаться в потолок
      */
     public static final int COUNT_NOTHING = 4;
+
+    private int countFreeSpace;
     private int size;
 
     List<StringBuilder> layers;
@@ -71,19 +76,37 @@ public class BoardSimulator {
     }
 
     public boolean isFree(int x, int y) {
+        int banColumn = countFreeSpace < 396 - 90 ? 19 : 17;
+
         if (x < 0 || x > 17 || y < 0 || y > 17) {
             return false;
         }
         if (layers.get(offsetY(y)).charAt(x) != '.') {
             return false;
         }
+        if (x == banColumn) {
+            return false;
+        }
         return true;
+    }
+
+    public int getCountFreeSpace() {
+        List<Character> freeSpaces = new ArrayList<>();
+        layers.forEach(l -> {
+            for (char ch : l.toString().toCharArray()) {
+                if (ch == '.') {
+                    freeSpaces.add(ch);
+                }
+            }
+        });
+        return freeSpaces.size();
     }
 
     public void put(Point[] points) {
         for (Point point : points) {
             layers.get(offsetY(point.getY())).setCharAt(point.getX(), '#');
         }
+        countFreeSpace = getCountFreeSpace();
     }
 
     public int clear() {
@@ -114,7 +137,7 @@ public class BoardSimulator {
         // отверстия
         cost += holes * 26.8;
         // очищенные ряды
-        cost += cleared;
+        cost -= Math.pow(cleared, 8);
         // колодцы
         cost += sumps * 15.8;
         // вертикальные переходы
