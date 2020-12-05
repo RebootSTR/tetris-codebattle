@@ -42,7 +42,7 @@ public class Calculator {
     }
 
     public static void calculateBetterCenter(String layer, Queue<Elements> elements, Point[] points) {
-        simulator.setLayers(_glassBoard.getLayersString().get(0), points);
+        simulator.setLayers(layer, points);
         betterCost = 100000;
         calculateCost(elements, true, 0);
     }
