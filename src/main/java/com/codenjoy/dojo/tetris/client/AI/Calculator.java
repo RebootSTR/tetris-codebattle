@@ -15,10 +15,7 @@ import java.util.*;
  */
 public class Calculator {
 
-    public static final BoardSimulator simulator = new BoardSimulator();
-
-    private static Board _board;
-    private static GlassBoard _glassBoard;
+    public static BoardSimulator simulator;
 
     public static int betterRotate;
     public static Point betterCenter = new PointImpl(0,0);
@@ -42,6 +39,12 @@ public class Calculator {
     }
 
     public static void calculateBetterCenter(String layer, Queue<Elements> elements, Point[] points) {
+        if (!Bot.allOMode) {
+            simulator = new BoardSimulator();
+        } else {
+            simulator = new BoardSimulatorWithAllOLogic();
+        }
+
         simulator.setLayers(layer, points);
         betterCost = 100000;
         calculateCost(elements, true, 0);
@@ -126,7 +129,7 @@ public class Calculator {
         double myCost = 0;
 
         // Общая высота установки фигур
-        myCost += getMinimumY(points) * 12.88;
+        myCost += getMinimumY(points) * 10; // 12.88
 
         return myCost;
     }

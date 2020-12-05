@@ -16,23 +16,40 @@ import java.util.Queue;
  */
 public class Bot {
 
-    public List<Command> getAnswerList(Board board) {
+    public static boolean allOMode = true;
 
+    public void checkAllOMode(Elements type) {
+        if (allOMode) {
+            if (!type.equals(Elements.YELLOW)) {
+                allOMode = false;
+            }
+        }
+    }
+
+    public List<Command> getAnswerList(Board board) {
         Elements type = board.getCurrentFigureType();
         Point currentCenter = board.getCurrentFigurePoint();
         Point betterCenter = null;
 
+        checkAllOMode(type);
+
         Queue<Elements> elements = new LinkedList<>();
 
         elements.add(type);
-        elements.add(board.getFutureFigures().get(0)); // самое то
+        if (!allOMode) {
+            elements.add(board.getFutureFigures().get(0)); // самое то
+        }
 //        elements.add(board.getFutureFigures().get(1)); // 3 фигуры реально, но долго, появляются артефакты
 //        elements.add(board.getFutureFigures().get(2)); // 4 тоже фиг просчитаешь
 //        elements.add(board.getFutureFigures().get(3)); // просчитать 5 фигур невозможно
 
         System.out.println(elements);
 
-        Calculator.calculateBetterCenter(board, elements);
+        Calculator.calculateBetterCenter(
+                board.getGlass().getLayersString().get(0),
+                elements,
+                board.predictCurrentFigurePoints()
+        );
         betterCenter = Calculator.betterCenter;
 
         List<Command> result = new ArrayList<>();

@@ -1,13 +1,9 @@
 package com.codenjoy.dojo.tetris.client.AI;
 
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.tetris.client.Board;
-import com.codenjoy.dojo.tetris.client.GlassBoard;
 import lombok.Getter;
-import scala.Char;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,6 +18,9 @@ public class BoardSimulator {
      * Костыль, стобы не врезаться в потолок
      */
     public static final int COUNT_NOTHING = 4;
+
+    public int banX = 17;
+    public boolean ban = true;
 
     private int countFreeSpace;
     private int size;
@@ -75,8 +74,16 @@ public class BoardSimulator {
         return result;
     }
 
+    public void updateBan() {
+        if (countFreeSpace < 396 - 120){ // 85
+            ban = false;
+        } else {
+            ban = true;
+        }
+    }
+
     public boolean isFree(int x, int y) {
-        int banColumn = countFreeSpace < 396 - 85 ? 19 : 17;
+        updateBan();
 
         if (x < 0 || x > 17 || y < 0 || y > 17) {
             return false;
@@ -84,7 +91,7 @@ public class BoardSimulator {
         if (layers.get(offsetY(y)).charAt(x) != '.') {
             return false;
         }
-        if (x == banColumn) {
+        if (ban && x == banX) {
             return false;
         }
         return true;
@@ -136,25 +143,31 @@ public class BoardSimulator {
         int columnJumps = getCountColumnJumps();
         // горизонтальные переходы
         int rowJumps = getCountRowJumps();
+        // занятые блоки справа
+        int countBlocksInRightSide = getCountBlocksInRightSide();
 
         double cost = startCost;
 
         // бесполезная идея, но на всякий случай пусть будет, мб придумаю что сделать можно
-        Stratrgy stratrgy = Stratrgy.POINTS;
+        Stratrgy stratrgy = Stratrgy.MAIN;
         switch (stratrgy) {
-            case SURVIVAL:
-                cost += holes * 26.8;
-                cost += cleared;
+            case MAIN:
+                cost += holes * 100;
+                if (cleared > 2) {
+                    cost -= Math.pow(cleared+1, 8);
+                }
                 cost += sumps * 15.8;
-                cost += columnJumps * 27.6;
-                cost += rowJumps * 30.2;
+                cost += columnJumps * 38.6;
+                cost += rowJumps * 10; // 45
+                cost += Math.pow(countBlocksInRightSide+2, 4);
                 break;
-            case POINTS:
+            case TEST:
                 cost += holes * 26.8;
                 cost -= Math.pow(cleared, 8);
                 cost += sumps * 15.8;
                 cost += columnJumps * 27.6;
                 cost += rowJumps * 30.2;
+                cost += countBlocksInRightSide * 15;
                 break;
         }
 
@@ -229,6 +242,19 @@ public class BoardSimulator {
         }
 
         return countRowJumps;
+    }
+
+    private int getCountBlocksInRightSide() {
+        int countBlocksInRightSide = 0;
+        int rightSide = 17;
+        if (!ban) {
+            for (int y = 0; y < size - COUNT_NOTHING; y++) {
+                if (!isFree(rightSide, y)) {
+                    countBlocksInRightSide++;
+                }
+            }
+        }
+        return countBlocksInRightSide;
     }
 
     /**
