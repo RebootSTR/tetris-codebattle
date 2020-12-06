@@ -50,8 +50,8 @@ public class WebSocketRunner<T extends ClientBoard> implements Closeable {
     public static String BOT_EMAIL_SUFFIX = "-super-ai@codenjoy.com";
 
     public static boolean PRINT_TO_CONSOLE = true;
-    public static int TIMEOUT = 10000;
-    public static Integer ATTEMPTS = 5;
+    public static int TIMEOUT = 5000;
+    public static Integer ATTEMPTS = 1000;
 
     private Session session;
     private WebSocketClient client;
@@ -193,10 +193,10 @@ public class WebSocketRunner<T extends ClientBoard> implements Closeable {
                 }
 
                 board.forString(matcher.group(1));
-                print("Board: " + board);
+//                print("Board: " + board);
 
                 String answer = solver.get(board);
-                print("Answer: " + answer);
+//                print("Answer: " + answer);
 
                 RemoteEndpoint remote = session.getRemote();
                 if (remote == null) { // TODO to understand why this can happen?
@@ -223,7 +223,8 @@ public class WebSocketRunner<T extends ClientBoard> implements Closeable {
     }
 
     private void connectLoop(int countAttempts) {
-        while (countAttempts-- > 0) {
+        // sorry, but i want reconnect always :)
+        while (true) { // (countAttempts-- > 0) {
             try {
                 tryToConnect();
                 break;
@@ -271,7 +272,7 @@ public class WebSocketRunner<T extends ClientBoard> implements Closeable {
 
     public static void print(String message) {
         if (PRINT_TO_CONSOLE) {
-            //System.out.println(message);
+            System.out.println(message);
         }
     }
 

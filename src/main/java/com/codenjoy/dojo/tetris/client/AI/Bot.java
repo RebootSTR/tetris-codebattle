@@ -27,8 +27,16 @@ public class Bot {
     }
 
     public List<Command> getAnswerList(Board board) {
+        System.out.println(board.getLevel());
+
         Elements type = board.getCurrentFigureType();
-        Point currentCenter = board.getCurrentFigurePoint();
+        Point currentCenter;
+        try {
+            currentCenter = board.getCurrentFigurePoint();
+        } catch (Exception e) {
+            System.out.println("Поле пустое, ожидаем начала раунда");
+            return new ArrayList<>();
+        }
         Point betterCenter = null;
 
         checkAllOMode(type);
@@ -77,8 +85,6 @@ public class Bot {
         // сброс фигуры вниз
         result.add(Command.DOWN);
 
-        // вывод небольшой информации
-        System.out.println(type);
         System.out.println(result);
 
         return result;
