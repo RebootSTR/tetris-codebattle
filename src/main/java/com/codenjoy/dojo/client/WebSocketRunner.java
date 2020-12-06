@@ -50,7 +50,7 @@ public class WebSocketRunner<T extends ClientBoard> implements Closeable {
     public static String BOT_EMAIL_SUFFIX = "-super-ai@codenjoy.com";
 
     public static boolean PRINT_TO_CONSOLE = true;
-    public static int TIMEOUT = 5000;
+    public static int TIMEOUT = 2000;
     public static Integer ATTEMPTS = 1000;
 
     private Session session;

@@ -18,6 +18,8 @@ public class Bot {
 
     public static boolean allOMode = true;
 
+    public static long luck = Long.MAX_VALUE;
+
     public void checkAllOMode(Elements type) {
         if (allOMode) {
             if (!type.equals(Elements.YELLOW)) {
@@ -27,7 +29,7 @@ public class Bot {
     }
 
     public List<Command> getAnswerList(Board board) {
-        System.out.println(board.getLevel());
+        // System.out.println(board.getLevel());
 
         Elements type = board.getCurrentFigureType();
         Point currentCenter;
